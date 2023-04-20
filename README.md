@@ -1,5 +1,15 @@
 <a name="readme-top"></a>
 
+Here are 7 tests (The average answer length should be between 200-300 characters.)
+
+1. “A simple html login page using html, css and js"
+2. "How to scrape a webpage in python”
+3. "How to scrape a webpage in node.js"
+4. "How to create a navigation bar and login"
+5. "How to create a footer page with bootstrap"
+6. "How to Create Zip files with node.js"
+7. "How to create a calculator in python"
+
 <!--
 HOW TO USE:
 This is an example of how you may give instructions on setting up your project locally.
