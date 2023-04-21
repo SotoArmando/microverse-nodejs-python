@@ -8,7 +8,15 @@
     <title>A simple html login page using html, css and js</title>
 </head>
 <style>
+    .col {
+        display: flex;
+        flex-direction: column;
+    }
 
+    .row {
+        display: flex;
+        /* flex-direction: row; defaults */
+    }
 </style>
 
 <body>
@@ -25,14 +33,28 @@
             renderStateLayout();
         },
         navigate_named_lib: (name) => {
-
+            window.man_state.layout = name;
+            renderStateLayout();
         }
     }
 
     const { parseHTML } = utils;
 
     window.man_state = {
-        layout: "home",
+        layout: "login",
+    }
+
+    window.utils = utils;
+
+    window.services = {
+        "login_signin": (event) => {
+            event.preventDefault();
+            const { login, password } = [...event.target.querySelectorAll("[name]")].reduce((prev, curr) => ({ [curr.name]: curr.value, ...prev }), {});
+            if (window.data.source.users.fetch().find(user => user.login == login && user.password == password)) {
+                window.utils.navigate_named_lib("home");
+            }
+            return false;
+        }
     }
 
     const { man_state } = window;
@@ -41,7 +63,7 @@
         layouts: { "home": home, "login": login }
     }
 
-    data = {
+    window.data = {
         source: {
             users: {
                 fetch: () => {
@@ -58,9 +80,12 @@
 
     function login(props) {
         return `
-            <form>
-                <input name="login" />
-                <input name="password" />
+            <form class="col" onsubmit="window.services.login_signin(event)">
+                <label>Username</label>
+                <input name="login" required />
+                <label>Password</label>
+                <input name="password" type="password" required />
+                <button type="submit">Submit</button>
             </form>
         `
     }
@@ -68,7 +93,7 @@
     function home(props) {
         return `
             <div>You are in! Welcome back!</div>
-            <button  onClick="" />
+            <button  onclick="window.utils.navigate_named_lib('login')" >Go back</button>
         `
     }
 
