@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>A simple html login page using html, css and js</title>
+</head>
+<style>
+
+</style>
+
+<body>
+    <div id="root"></div>
+</body>
+<script type="application/javascript">
+    const utils = {
+        parseHTML: (html) => {
+            var t = document.createElement('template');
+            t.innerHTML = html;
+            return t.content;
+        },
+        initialize_window: () => {
+            renderStateLayout();
+        },
+        navigate_named_lib: (name) => {
+
+        }
+    }
+
+    const { parseHTML } = utils;
+
+    window.man_state = {
+        layout: "home",
+    }
+
+    const { man_state } = window;
+
+    lib = {
+        layouts: { "home": home, "login": login }
+    }
+
+    data = {
+        source: {
+            users: {
+                fetch: () => {
+                    return [
+                        {
+                            "login": "sotoarmando",
+                            "password": "sotoarmandopw"
+                        }
+                    ]
+                }
+            }
+        }
+    }
+
+    function login(props) {
+        return `
+            <form>
+                <input name="login" />
+                <input name="password" />
+            </form>
+        `
+    }
+
+    function home(props) {
+        return `
+            <div>You are in! Welcome back!</div>
+            <button  onClick="" />
+        `
+    }
+
+    function renderStateLayout() {
+        document.body.children = [];
+        let component = parseHTML(lib["layouts"][man_state["layout"]]());
+        document.getElementById("root").innerHTML = "";
+        document.getElementById("root").appendChild(component);
+    }
+
+    window.onload = utils.initialize_window;
+
+
+</script>
+
+</html>
