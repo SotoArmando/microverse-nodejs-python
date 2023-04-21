@@ -1,5 +1,8 @@
-const sum = require('./sum');
 
-test('adds 1 + 2 to equal 3', () => {
-  expect(sum(1, 2)).toBe(3);
+let IkeaItemDetailsBot = require('../bots/ikea_item_details_bot');
+
+test('adds 1 + 2 to equal 3', async () => {
+    let bot = new IkeaItemDetailsBot();
+    result = await bot.performUrl("https://www.ikea.com.do/en/pd/svardborg-rug-flatwoven-off-white-multicolor-art-90507924");
+    console.log(result)
 });

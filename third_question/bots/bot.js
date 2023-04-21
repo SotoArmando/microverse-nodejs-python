@@ -2,7 +2,8 @@ const cheerio = require('cheerio');
 const request = require('request');
 const schedule = require('node-schedule');
 
-export default class Bot {
+
+module.exports = class Bot {
     constructor(htmlParser) {
         this.parser = htmlParser;
     }

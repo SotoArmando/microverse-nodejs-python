@@ -1,4 +1,4 @@
-export default class CheerioParser {
+module.exports = class CheerioParser {
 
     constructor() {}
   
@@ -8,7 +8,7 @@ export default class CheerioParser {
   
     static match_reduce(matches, soup) {
       return Object.keys(matches).reduce((result, key) => {
-        const value = matches[key](this.match_selector(key, soup));
+        const value = matches[key](CheerioParser.match_selector(key, soup));
         return { ...result, ...value };
       }, {});
     }

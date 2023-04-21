@@ -1,11 +1,12 @@
 
-import Bot from './bot';
-import { match_reduce } from './cherrio_parser';
+const Bot = require('./bot');
+const { match_reduce } = require('./cherrio_parser');
 
 
 class IkeaItemDetailsBot extends Bot {
     constructor() {
         super();
+        this.parser = this.html_parser;
         this.html_parser = this.html_parser.bind(this);
     }
 
@@ -22,6 +23,6 @@ class IkeaItemDetailsBot extends Bot {
     }
 }
 
-Object.assign(IkeaItemDetailsBot.prototype, BeautifulSoupParser);
+
 
 module.exports = IkeaItemDetailsBot;
