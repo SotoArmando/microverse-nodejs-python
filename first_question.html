@@ -17,6 +17,10 @@
         display: flex;
         /* flex-direction: row; defaults */
     }
+
+    .error_explanation {
+        color: red;
+    }
 </style>
 
 <body>
@@ -52,6 +56,8 @@
             const { login, password } = [...event.target.querySelectorAll("[name]")].reduce((prev, curr) => ({ [curr.name]: curr.value, ...prev }), {});
             if (window.data.source.users.fetch().find(user => user.login == login && user.password == password)) {
                 window.utils.navigate_named_lib("home");
+            } else {
+                event.target.querySelector(".error_explanation").innerHTML = "Incorrect login details."
             }
             return false;
         }
@@ -85,6 +91,7 @@
                 <input name="login" required />
                 <label>Password</label>
                 <input name="password" type="password" required />
+                <label class="error_explanation"></label>
                 <button type="submit">Submit</button>
             </form>
         `
