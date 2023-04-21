@@ -1,17 +1,12 @@
-import threading
-import schedule
-import functools
-import requests
-import asyncio
 from urllib.request import urlopen
-
-
+import asyncio
+import schedule
 
 class Bot():
     """Performs tasks to extract, parse, research data"""
 
-    def __init__(self, htmlParser):
-        self.parser = htmlParser;
+    def __init__(self, html_parser):
+        self.parser = html_parser;
 
     def open_url(self, url):
         """Opens a url page and returns its html contents"""
