@@ -1,20 +1,22 @@
 from . bot import Bot
 from . html_parser import HtmlParser
 
+
 class AmazonItemDetailsBot(Bot, HtmlParser):
     """Performs amazon details bot"""
 
     def __init__(self):
-        super.__init__(self.html_parser);
-    
+        super.__init__(self.html_parser)
+
+
     def html_parser(self, html):
         """Parses amazon details data"""
 
         matches = {
-            "name": self.match_tag_and_class("span","a-size-large product-title-word-break"),
-            "price": self.match_tag_and_class("span","a-offscreen"),
-            "src": self.match_attribute("img","a-dynamic-image", "src"),
+            "name": self.match_tag_and_class("span", "a-size-large product-title-word-break"),
+            "price": self.match_tag_and_class("span", "a-offscreen"),
+            "src": self.match_attribute("img", "a-dynamic-image", "src"),
+            "feature-bullets": [self.match_tag_and_class("ul", "a-unordered-list a-vertical a-spacing-mini"), self.match_tag_and_class("li", "a-list-item")]
         }
 
-        return self.reduce_matches(matches, html);
-    
+        return self.reduce_matches(matches, html)
