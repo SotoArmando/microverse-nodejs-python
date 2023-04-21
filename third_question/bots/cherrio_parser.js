@@ -1,9 +1,9 @@
-export default  class CheerioParser {
+export default class CheerioParser {
 
     constructor() {}
   
     static match_selector(selector, soup) {
-      return soup.querySelector(selector);
+      return soup(selector).first();
     }
   
     static match_reduce(matches, soup) {
