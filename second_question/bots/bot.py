@@ -1,6 +1,8 @@
-from urllib.request import urlopen
+import requests
 import asyncio
 import schedule
+from requests_html import HTMLSession
+
 
 class Bot():
     """Performs tasks to extract, parse, research data"""
@@ -8,12 +10,25 @@ class Bot():
     def __init__(self, html_parser):
         self.parser = html_parser;
 
+
     def open_url(self, url):
         """Opens a url page and returns its html contents"""
-        page = urlopen(url)
-        html_bytes = page.read()
-        html = html_bytes.decode("utf-8")
-        return html;
+        session = HTMLSession()
+        session.headers['user-agent'] = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/78.0.3904.97 Safari/537.36'
+        response = session.get(url, headers=session.headers)
+
+        script = """
+        () => {
+            return {
+                width: document.documentElement.clientWidth,
+                height: document.documentElement.clientHeight,
+                deviceScaleFactor: window.devicePixelRatio,
+            }
+        }
+        """
+
+        # response.html.render(script=script, reload=False)
+        return response.html;
 
     def perform_request(self, request):
         """Performs bot parser task, but using a request"""
