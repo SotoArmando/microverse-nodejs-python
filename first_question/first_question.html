@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>A simple html login page using html, css and js</title>
+</head>
+<style>
+    .col {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .row {
+        display: flex;
+        /* flex-direction: row; defaults */
+    }
+
+    .error_explanation {
+        color: red;
+    }
+</style>
+
+<body>
+    <div id="root"></div>
+</body>
+<script type="application/javascript">
+    const utils = {
+        parseHTML: (html) => {
+            var t = document.createElement('template');
+            t.innerHTML = html;
+            return t.content;
+        },
+        initialize_window: () => {
+            renderStateLayout();
+        },
+        navigate_named_lib: (name) => {
+            window.man_state.layout = name;
+            renderStateLayout();
+        }
+    }
+
+    const { parseHTML } = utils;
+
+    window.man_state = {
+        layout: "login",
+    }
+
+    window.utils = utils;
+
+    window.services = {
+        "login_signin": (event) => {
+            event.preventDefault();
+            const { login, password } = [...event.target.querySelectorAll("[name]")].reduce((prev, curr) => ({ [curr.name]: curr.value, ...prev }), {});
+            if (window.data.source.users.fetch().find(user => user.login == login && user.password == password)) {
+                window.utils.navigate_named_lib("home");
+            } else {
+                event.target.querySelector(".error_explanation").innerHTML = "Incorrect login details."
+            }
+            return false;
+        }
+    }
+
+    const { man_state } = window;
+
+    lib = {
+        layouts: { "home": home, "login": login }
+    }
+
+    window.data = {
+        source: {
+            users: {
+                fetch: () => {
+                    return [
+                        {
+                            "login": "sotoarmando",
+                            "password": "sotoarmandopw"
+                        }
+                    ]
+                }
+            }
+        }
+    }
+
+    function login(props) {
+        return `
+            <form class="col" onsubmit="window.services.login_signin(event)">
+                <label>Username</label>
+                <input name="login" required />
+                <label>Password</label>
+                <input name="password" type="password" required />
+                <label class="error_explanation"></label>
+                <button type="submit">Submit</button>
+            </form>
+        `
+    }
+
+    function home(props) {
+        return `
+            <div>You are in! Welcome back!</div>
+            <button  onclick="window.utils.navigate_named_lib('login')" >Go back</button>
+        `
+    }
+
+    function renderStateLayout() {
+        document.body.children = [];
+        let component = parseHTML(lib["layouts"][man_state["layout"]]());
+        document.getElementById("root").innerHTML = "";
+        document.getElementById("root").appendChild(component);
+    }
+
+    window.onload = utils.initialize_window;
+
+
+</script>
+
+</html>
