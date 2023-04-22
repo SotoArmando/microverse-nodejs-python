@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>A simple html login page using html, css and js</title>
+</head>
+<style>
+    body {
+        padding: 0;
+        margin: 0;
+    }
+    .col {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .row {
+        display: flex;
+        /* flex-direction: row; defaults */
+    }
+
+    .error_explanation {
+        color: red;
+    }
+
+    .navigation-bar {
+        border-bottom: 1px solid gray;
+        min-height: 3rem;
+        display: flex;
+        align-items: center;
+        padding-left: 1rem;
+        box-shadow: 0 19px 38px rgba(0,0,0,0.30), 0 15px 12px rgba(0,0,0,0.22);
+        margin-bottom: 3rem;
+        
+    }
+    
+    .navigation-bar > * {
+        margin-right: 1rem;
+        cursor: pointer;
+    }
+
+    .navigation-bar > *:hover {
+        text-decoration: underline;
+        
+    }
+</style>
+
+<body>
+    <div class="navigation-bar row">
+        <span onclick="window.utils.navigate_named_lib('about')">About</span>
+        <span onclick="window.utils.navigate_named_lib('credits')">Credits</span>
+        <span onclick="window.utils.navigate_named_lib('login')">Log in</span>
+    </div>
+    <div id="root"></div>
+</body>
+<script type="application/javascript">
+    const utils = {
+        parseHTML: (html) => {
+            var t = document.createElement('template');
+            t.innerHTML = html;
+            return t.content;
+        },
+        initialize_window: () => {
+            renderStateLayout();
+        },
+        navigate_named_lib: (name) => {
+            window.man_state.layout = name;
+            renderStateLayout();
+        }
+    }
+
+    const { parseHTML } = utils;
+
+    window.man_state = {
+        layout: "login",
+    }
+
+    window.utils = utils;
+
+    window.services = {
+        "login_signin": (event) => {
+            event.preventDefault();
+
+            const { login, password } = [...event.target.querySelectorAll("[name]")].reduce((prev, curr) => ({ [curr.name]: curr.value, ...prev }), {});
+            fetch(`http://localhost:3000/users/login?login=${login}&password=${password}`, {
+                mode: 'cors',
+            }).then(res => res.json()).then(res_json => {
+                if (res_json == true) {
+                    window.utils.navigate_named_lib("home");
+                } else {
+                    event.target.querySelector(".error_explanation").innerHTML = "Incorrect login details."
+                }
+            })
+
+            return false;
+        }
+    }
+
+    const { man_state } = window;
+
+    lib = {
+        layouts: { "home": home, "login": login, "about": about , "credits": credits }
+    }
+
+    window.data = {
+        source: {
+            users: {
+                fetch: () => {
+                    return [
+                        {
+                            "login": "sotoarmando",
+                            "password": "sotoarmandopw"
+                        }
+                    ]
+                }
+            }
+        }
+    }
+
+    function about(props) {
+        return `
+        <main>
+            <h2>Our Story</h2>
+            <p>We are a company that was founded in 2021 with the goal of providing high-quality products to our customers.</p>
+            <h2>Our Team</h2>
+            <ul>
+                <li>John Doe - CEO</li>
+                <li>Jane Smith - CMO</li>
+                <li>Mike Johnson - CFO</li>
+            </ul>
+            <h2>Our Mission</h2>
+            <p>Our mission is to provide our customers with the best possible products and service, while also promoting sustainability and ethical business practices.</p>
+        </main>
+        `
+    }
+    function login(props) {
+        return `
+            <form class="col" onsubmit="window.services.login_signin(event)">
+                <label>Username</label>
+                <input name="login" required />
+                <label>Password</label>
+                <input name="password" type="password" required />
+                <label class="error_explanation"></label>
+                <button type="submit">Submit</button>
+            </form>
+        `
+    }
+
+    function credits(props) {
+        return `
+        <main>
+            <h2>Image Credits</h2>
+            <ul>
+                <li><a href="https://www.pexels.com/photo/people-walking-on-street-1295186/">People Walking on Street</a> by Pexels</li>
+                <li><a href="https://www.pexels.com/photo/yellow-and-blue-gym-equipment-5059366/">Yellow and Blue Gym Equipment</a> by Pexels</li>
+                <li><a href="https://www.pexels.com/photo/snowy-trees-in-the-forest-7606467/">Snowy Trees in the Forest</a> by Pexels</li>
+            </ul>
+            <h2>Icon Credits</h2>
+            <ul>
+                <li><a href="https://fontawesome.com/">Font Awesome</a></li>
+                <li><a href="https://www.flaticon.com/">Flaticon</a></li>
+            </ul>
+        </main>
+        `
+    }
+
+    function home(props) {
+        return `
+        <main>
+            <h2>Featured Products</h2>
+            <ul>
+                <li>
+                <img src="https://images.pexels.com/photos/5059366/pexels-photo-5059366.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1" alt="Product 1">
+                <h3>Product 1</h3>
+                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+                </li>
+                <li>
+                <img src="https://images.pexels.com/photos/5059366/pexels-photo-5059366.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1" alt="Product 2">
+                <h3>Product 2</h3>
+                <p>Nulla convallis nulla in tellus hendrerit tempor.</p>
+                </li>
+                <li>
+                <img src="https://images.pexels.com/photos/5059366/pexels-photo-5059366.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1" alt="Product 3">
+                <h3>Product 3</h3>
+                <p>Donec imperdiet libero non dui faucibus bibendum.</p>
+                </li>
+            </ul>
+        </main>
+        `
+    }
+
+    function renderStateLayout() {
+        document.body.children = [];
+        let component = parseHTML(lib["layouts"][man_state["layout"]]());
+        document.getElementById("root").innerHTML = "";
+        document.getElementById("root").appendChild(component);
+    }
+
+    window.onload = utils.initialize_window;
+
+
+</script>
+
+</html>

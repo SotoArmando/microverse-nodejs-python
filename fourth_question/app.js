@@ -1,28 +1,25 @@
-const http = require('http');
-const fs = require('fs');
 const users_controller = require("./controllers/users/users_controller");
-const { application } = require('express');
-
-const hostname = '127.0.0.1';
-const port = 3000;
+const cors = require('cors');
 
 
-fs.readFile('./public/index.html', function (err, html) {
+const express = require('express');
+const app = express();
 
-  if (err) throw err;
+app.set('view engine', 'ejs');
+app.set('views', './public');
 
-  const server = http.createServer((req, res) => {
-    res.writeHeader(200, { "Content-Type": "text/html" });
-    res.write(html);
-    res.end();
-  });
+app.use(cors({
+  origin: function (origin, callback) {
+    callback(null, '*');
+  }
+}));
 
-  application.use("/users", users_controller);
-  
-  server.listen(port, hostname, () => {
-    console.log(`Server running at http://${hostname}:${port}/`);
-  });
+app.use("/users", users_controller);
+
+app.get('/', (req, res) => {
+  res.render('index');
 });
 
-
-
+app.listen(3000, () => {
+  console.log('Server started on port 3000');
+});
